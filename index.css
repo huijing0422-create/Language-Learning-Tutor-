@@ -1,0 +1,497 @@
+:root {
+  --background-color: #f0f4f8;
+  --text-color: #102a43;
+  --header-bg: #ffffff;
+  --tutor-message-bg: #e0e7ff;
+  --user-message-bg: #ffffff;
+  --input-bg: #ffffff;
+  --input-text-color: #102a43;
+  --button-color: #334e68;
+  --border-color: #d9e2ec;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --accent-color: #3b82f6;
+  --modal-backdrop: rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #102a43;
+    --text-color: #f0f4f8;
+    --header-bg: #1f3651;
+    --tutor-message-bg: #294261;
+    --user-message-bg: #334e68;
+    --input-bg: #1f3651;
+    --input-text-color: #f0f4f8;
+    --button-color: #9fb3c8;
+    --border-color: #334e68;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --accent-color: #60a5fa;
+    --modal-backdrop: rgba(0, 0, 0, 0.6);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--header-bg);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+header {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--header-bg);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  z-index: 10;
+}
+
+h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+#chat-container {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--background-color);
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 18px;
+  max-width: 75%;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.message.tutor {
+  background-color: var(--tutor-message-bg);
+  color: var(--text-color);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.message.user {
+  background-color: var(--user-message-bg);
+  color: var(--text-color);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+#chat-form {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--header-bg);
+}
+
+#chat-input {
+  flex-grow: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  color: var(--input-text-color);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#chat-input:focus {
+  border-color: var(--button-color);
+}
+
+#chat-form button {
+  background: none;
+  border: none;
+  padding: 0 8px;
+  cursor: pointer;
+  color: var(--button-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+#chat-form button[type="submit"] {
+  margin-left: 8px;
+}
+
+#chat-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#chat-form button svg {
+  width: 24px;
+  height: 24px;
+}
+
+#dictionary-btn {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+
+#loader {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  align-self: flex-start;
+}
+
+#loader .dot, #dictionary-loader .dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--button-color);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+#loader .dot:nth-child(1), #dictionary-loader .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+#loader .dot:nth-child(2), #dictionary-loader .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-backdrop);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5vh;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--header-bg);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+
+/* Dictionary Modal Specifics */
+#dictionary-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#dictionary-input {
+  flex-grow: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  color: var(--input-text-color);
+  outline: none;
+}
+
+#dictionary-form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#dictionary-results-container {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+#dictionary-loader {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dictionary-result {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dictionary-result-main {
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.dictionary-result:last-child {
+  border-bottom: none;
+}
+
+.dictionary-result-main:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dictionary-result-main:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.result-term {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+}
+
+.result-details {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.save-vocab-btn {
+    background-color: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.save-vocab-btn:disabled {
+    border-color: var(--border-color);
+    color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* Vocabulary Modal Styles */
+.vocabulary-summary {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.vocabulary-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.search-group {
+    flex-grow: 1;
+    min-width: 200px;
+    position: relative;
+}
+.search-group svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--button-color);
+    opacity: 0.6;
+}
+#search-vocabulary-input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    font-size: 0.9rem;
+}
+.vocabulary-controls label {
+    font-size: 0.9rem;
+}
+.vocabulary-controls select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    font-size: 0.9rem;
+}
+#type-filter label {
+    cursor: pointer;
+}
+#type-filter input[type="radio"] {
+    margin-right: 2px;
+}
+
+
+#vocabulary-list-container {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.empty-list-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.vocabulary-item {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.vocabulary-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  .vocabulary-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.vocabulary-item:last-child {
+    border-bottom: none;
+}
+
+.vocab-main {
+    flex-grow: 1;
+}
+
+.vocab-term {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+}
+
+.vocab-details {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.vocab-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+.vocab-meta select {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    font-size: 0.8rem;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Language Learning Tutor</title>
+    <link rel="stylesheet" href="index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@^0.8.0"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Language Learning Tutor</h1>
+      </header>
+      <main id="chat-container"></main>
+      <div id="loader" class="hidden">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <form id="chat-form">
+        <button type="button" id="dictionary-btn" aria-label="Open dictionary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"
+            />
+          </svg>
+        </button>
+        <button type="button" id="vocabulary-btn" aria-label="Open learning record">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"
+            />
+          </svg>
+        </button>
+        <input
+          id="chat-input"
+          type="text"
+          placeholder="Type your message..."
+          autocomplete="off"
+          autofocus
+        />
+        <button type="submit" aria-label="Send message">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <div id="dictionary-modal" class="modal-backdrop hidden">
+      <div class="dictionary-content modal-content">
+        <div class="dictionary-header modal-header">
+          <h2>Dictionary</h2>
+          <button id="close-dictionary-btn" class="close-btn" aria-label="Close dictionary">
+            &times;
+          </button>
+        </div>
+        <form id="dictionary-form">
+          <input
+            id="dictionary-input"
+            type="text"
+            placeholder="Search for a word or phrase..."
+            autocomplete="off"
+          />
+          <button type="submit" aria-label="Search dictionary">Search</button>
+        </form>
+        <div id="dictionary-results-container">
+          <div id="dictionary-loader" class="hidden">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div id="dictionary-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="vocabulary-modal" class="modal-backdrop hidden">
+      <div class="vocabulary-content modal-content">
+        <div class="vocabulary-header modal-header">
+          <h2>學習紀錄</h2>
+          <button id="close-vocabulary-btn" class="close-btn" aria-label="Close learning record">
+            &times;
+          </button>
+        </div>
+        <div class="vocabulary-summary">
+          <span id="vocab-stats">今日新學：0</span>
+        </div>
+        <div class="vocabulary-controls">
+           <div class="control-group search-group">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+              <input type="search" id="search-vocabulary-input" placeholder="查詢單字或片語...">
+          </div>
+          <div class="control-group">
+            <label for="language-filter">語言：</label>
+            <select id="language-filter">
+              <option value="all">全部語言</option>
+            </select>
+          </div>
+          <div class="control-group">
+              <label for="sort-vocabulary">排序：</label>
+              <select id="sort-vocabulary">
+                  <option value="date">日期 (新到舊)</option>
+                  <option value="alphabetical">字母順序</option>
+                  <option value="proficiency">熟練度</option>
+              </select>
+          </div>
+           <div id="type-filter" class="control-group">
+              <span>類型：</span>
+              <input type="radio" id="type-all" name="type-filter" value="all" checked>
+              <label for="type-all">全部</label>
+              <input type="radio" id="type-word" name="type-filter" value="word">
+              <label for="type-word">單詞</label>
+              <input type="radio" id="type-phrase" name="type-filter" value="phrase">
+              <label for="type-phrase">片語</label>
+          </div>
+        </div>
+        <div id="vocabulary-list-container">
+            <div id="vocabulary-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="index.tsx"></script>
+  </body>
+</html>
